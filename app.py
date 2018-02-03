@@ -1,3 +1,4 @@
+import numpy as np
 n=10
 #for queens problem to draw column
 
@@ -81,6 +82,66 @@ def hourseMouve(n,actualPosition):
 
     return allowedMoves
 
-positions=[[0,0],[2,3],[4,1]]
-# print hourseMouve(6,[4,4])
-print drawChessTable(2, positions)
+# print hourseMouve(5,[0,1])
+
+
+def existInArray(e,array):
+
+    for i in array:
+        if (e == i).all():
+            return True
+    return False
+
+
+def diffrenceTwo2DArrays(a,b):
+    c=[]
+    for i in a:
+        if existInArray(i,b)==False:
+            c.append(i)
+    for i in b:
+        if existInArray(i,a)==False:
+            c.append(i)
+
+    return c
+
+def filterPositions(n,original):
+
+    impossibl=[]
+    possible=hourseMouve(n,original)
+    possible=np.asarray(possible)
+    for i in possible:
+        if (i == original).any():
+            impossibl.append(i)
+
+    print impossibl
+    print possible
+    filtred=diffrenceTwo2DArrays(possible,impossibl)
+
+    return filtred
+
+
+
+def findQueenPositions(n):
+    prohebitedLines = []
+    prohebitedCol = []
+
+    firstQueen=[2,0]
+    possilePositions=hourseMouve(n,firstQueen)
+    possilePositions.append(firstQueen)
+    possilePositions
+    drawChessTable(n,possilePositions)
+
+
+# findQueenPositions(5)
+
+pos=hourseMouve(5,[2,0])
+
+print pos
+filterPositions(5,[2,0])
+# #drawChessTable(5,pos)
+# print "======================================"
+#drawChessTable(5,filterPositions(n,[2,0]))
+
+a=np.asarray([[4, 1], [3, 2], [0, 1], [1, 2]])
+c=np.asarray([[1,2],[4,1]])
+
