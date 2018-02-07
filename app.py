@@ -1,4 +1,25 @@
 import numpy as np
+from threading import Thread
+import time
+import sys
+
+class OnePossibleFragmentOfSolution(Thread):
+
+    def __init__(self, n,current):
+        Thread.__init__(self)
+        self.n=n
+        self.currentArray=current
+        self.currentPosi=current[len(current)-1]
+
+        def run(self):
+            n=self.n
+
+            carray=self.currentArray
+            newPositions=filterPositions(n,self.currentPosi)
+            positions=completeArray(carray,newPositions)
+            drawChessTable(n,positions)
+            return positions
+
 n=10
 #for queens problem to draw column
 
@@ -21,6 +42,14 @@ def column(n,index):
 
 
     return x
+
+
+def completeArray(a,b):
+    for i in b:
+        if  existInArray(i,a)== False:
+            a.append(i)
+
+    return a
 # to draw line of chess table
 def line(n):
     y = "_"
@@ -86,6 +115,7 @@ def hourseMouve(n,actualPosition):
 
 
 def existInArray(e,array):
+    array = np.asarray(array)
 
     for i in array:
         if (e == i).all():
@@ -104,6 +134,7 @@ def diffrenceTwo2DArrays(a,b):
 
     return c
 
+
 def filterPositions(n,original):
 
     impossibl=[]
@@ -113,35 +144,52 @@ def filterPositions(n,original):
         if (i == original).any():
             impossibl.append(i)
 
-    print impossibl
-    print possible
     filtred=diffrenceTwo2DArrays(possible,impossibl)
+    #filterPositions(n, possible[0])
 
     return filtred
 
 
 
 def findQueenPositions(n):
-    prohebitedLines = []
-    prohebitedCol = []
+    prohebitedLines = [2]
+    prohebitedCol = [0]
 
     firstQueen=[2,0]
     possilePositions=hourseMouve(n,firstQueen)
     possilePositions.append(firstQueen)
-    possilePositions
-    drawChessTable(n,possilePositions)
+    possilePositions=filterPositions(n,firstQueen)
 
+    for i in possilePositions:
+        sur=[firstQueen]
+        sur.append(i)
+        thread=OnePossibleFragmentOfSolution(n,sur)
+        thread.start()
+        thread.join()
+
+
+
+
+    #drawChessTable(n,possilePositions)
 
 # findQueenPositions(5)
 
-pos=hourseMouve(5,[2,0])
+#pos=hourseMouve(5,[2,0])
 
-print pos
-filterPositions(5,[2,0])
-# #drawChessTable(5,pos)
-# print "======================================"
+#print pos
+#filterPositions(5,[2,0])
+#drawChessTable(5,pos)
+#print "======================================"
 #drawChessTable(5,filterPositions(n,[2,0]))
 
 a=np.asarray([[4, 1], [3, 2], [0, 1], [1, 2]])
 c=np.asarray([[1,2],[4,1]])
+#print diffrenceTwo2DArrays(a,c)
 
+a=[[3,1],[2,3]]
+b=[[2,0],[0,1]]
+# print  completeArray(a,b)
+
+thread = OnePossibleFragmentOfSolution(5, b)
+thread.start()
+thread.join()
